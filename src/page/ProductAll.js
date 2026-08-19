@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import { API_URL } from "../api";
 
 function ProductAll() {
   const [products, setProducts] = useState([]);
+  const [searchParams] = useSearchParams();
+  const filter = searchParams.get("filter");
 
   useEffect(() => {
     fetch(`${API_URL}/products`)
@@ -12,11 +14,17 @@ function ProductAll() {
       .then((data) => setProducts(data));
   }, []);
 
+  const filteredProducts = products.filter((product) => {
+    if (filter === "new") return product.new;
+    if (filter === "choice") return product.choice;
+    return true;
+  });
+
   return (
     <div>
       <Header />
       <div className="product-grid">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <Link to={`/product/${product.id}`} key={product.id} className="product-card">
             <div className="product-thumb">
               <img src={product.img} alt={product.title} />
