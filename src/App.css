@@ -1,20 +1,57 @@
 .header {
   border-bottom: 1px solid #eaeaea;
+  position: relative;
 }
 
 .header-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   padding: 16px 24px;
+}
+
+.hamburger {
+  display: none;
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .logo {
   font-size: 22px;
   font-weight: 700;
-  color: #111;
+  color: #c00;
   text-decoration: none;
   letter-spacing: 1px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.search-form input {
+  border: none;
+  outline: none;
+  padding: 6px 4px;
+  font-size: 14px;
+  width: 140px;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .auth-btn {
@@ -25,6 +62,7 @@
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .nav {
@@ -42,9 +80,15 @@
   border-bottom: 2px solid transparent;
 }
 
-.nav-link.active {
+.nav-link:hover {
   color: #111;
   border-bottom-color: #111;
+}
+
+.search-result-info {
+  padding: 16px 24px 0;
+  font-size: 14px;
+  color: #555;
 }
 
 .product-grid {
@@ -62,6 +106,7 @@
 
 .product-thumb {
   position: relative;
+  overflow: hidden;
 }
 
 .product-thumb img {
@@ -69,17 +114,17 @@
   aspect-ratio: 3 / 4;
   object-fit: cover;
   background: #f5f5f5;
+  transition: transform 0.25s ease;
 }
 
-.badges {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  display: flex;
-  gap: 6px;
+.product-card:hover .product-thumb img {
+  transform: scale(1.06);
 }
 
 .badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
   font-size: 11px;
   padding: 3px 8px;
   color: #fff;
@@ -90,10 +135,6 @@
   background: #111;
 }
 
-.badge.choice {
-  background: #c00;
-}
-
 .product-card .title {
   margin: 10px 0 4px;
   font-size: 14px;
@@ -102,6 +143,12 @@
 .product-card .price {
   font-weight: 700;
   font-size: 14px;
+}
+
+.conscious {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #2f6b3a;
 }
 
 .login-page {
@@ -137,38 +184,130 @@
   padding: 60px 0;
 }
 
-.product-detail {
+.detail-card {
   display: flex;
   gap: 40px;
   padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.product-detail img {
+.detail-img {
   width: 400px;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   background: #f5f5f5;
 }
 
-.detail-info h2 {
-  margin: 12px 0 8px;
+.detail-info {
+  padding-top: 8px;
 }
 
-.detail-info .price {
-  font-size: 18px;
-  font-weight: 700;
+.detail-info h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.detail-price {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.detail-info .conscious {
   margin-bottom: 20px;
 }
 
-.sizes {
-  display: flex;
-  gap: 8px;
-}
-
-.size-btn {
-  width: 40px;
-  height: 40px;
+.size-select {
+  display: block;
+  width: 220px;
+  padding: 10px;
+  margin-bottom: 12px;
   border: 1px solid #ccc;
   background: #fff;
+  font-size: 14px;
+}
+
+.add-btn {
+  width: 220px;
+  padding: 12px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
   cursor: pointer;
+}
+
+.add-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* Mobile hamburger side menu */
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 240px;
+  height: 100%;
+  background: #d9b98f;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.close-btn {
+  align-self: flex-end;
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.mobile-nav-link {
+  color: #111;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .search-form input {
+    width: 90px;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .detail-img {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-overlay {
+    display: none !important;
+  }
 }

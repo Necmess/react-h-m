@@ -8,6 +8,7 @@ function ProductDetail() {
   const { id } = useParams();
   const { isLoggedIn } = useAuth();
   const [product, setProduct] = useState(null);
+  const [size, setSize] = useState("");
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -32,22 +33,29 @@ function ProductDetail() {
   return (
     <div>
       <Header />
-      <div className="product-detail">
-        <img src={product.img} alt={product.title} />
+      <div className="detail-card">
+        <img src={product.img} alt={product.title} className="detail-img" />
         <div className="detail-info">
-          <div className="badges">
-            {product.new && <span className="badge new">NEW</span>}
-            {product.choice && <span className="badge choice">CHOICE</span>}
-          </div>
           <h2>{product.title}</h2>
-          <p className="price">{product.price.toLocaleString()}원</p>
-          <div className="sizes">
+          <p className="detail-price">₩ {product.price}</p>
+          {product.choice && <p className="conscious">Conscious choice</p>}
+          <select
+            className="size-select"
+            value={size}
+            onChange={(e) => setSize(e.target.value)}
+          >
+            <option value="" disabled>
+              사이즈 선택
+            </option>
             {product.size.map((s) => (
-              <button key={s} className="size-btn">
+              <option key={s} value={s}>
                 {s}
-              </button>
+              </option>
             ))}
-          </div>
+          </select>
+          <button className="add-btn" disabled={!size}>
+            추가
+          </button>
         </div>
       </div>
     </div>

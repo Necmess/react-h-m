@@ -6,7 +6,7 @@ import { API_URL } from "../api";
 function ProductAll() {
   const [products, setProducts] = useState([]);
   const [searchParams] = useSearchParams();
-  const filter = searchParams.get("filter");
+  const query = (searchParams.get("q") || "").trim().toLowerCase();
 
   useEffect(() => {
     fetch(`${API_URL}/products`)
@@ -14,27 +14,28 @@ function ProductAll() {
       .then((data) => setProducts(data));
   }, []);
 
-  const filteredProducts = products.filter((product) => {
-    if (filter === "new") return product.new;
-    if (filter === "choice") return product.choice;
-    return true;
-  });
+  const filteredProducts = query
+    ? products.filter((product) => product.title.toLowerCase().includes(query))
+    : products;
 
   return (
     <div>
       <Header />
+      {query && (
+        <p className="search-result-info">
+          "{searchParams.get("q")}" 검색 결과 {filteredProducts.length}건
+        </p>
+      )}
       <div className="product-grid">
         {filteredProducts.map((product) => (
           <Link to={`/product/${product.id}`} key={product.id} className="product-card">
             <div className="product-thumb">
               <img src={product.img} alt={product.title} />
-              <div className="badges">
-                {product.new && <span className="badge new">NEW</span>}
-                {product.choice && <span className="badge choice">CHOICE</span>}
-              </div>
+              {product.new && <span className="badge new">NEW</span>}
             </div>
             <p className="title">{product.title}</p>
             <p className="price">{product.price.toLocaleString()}원</p>
+            {product.choice && <p className="conscious">Conscious choice</p>}
           </Link>
         ))}
       </div>
